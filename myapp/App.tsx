@@ -17,8 +17,11 @@ import {
   View,
 } from 'react-native';
 
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Register from './components/Authentification/Register';
+import Login from './components/Authentification/Login';
+import Homescreen from './components/MainContent/Homescreen';
 import {
   Colors,
   DebugInstructions,
@@ -30,7 +33,7 @@ import {
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
-
+const Stack = createStackNavigator();
 function Section({children, title}: SectionProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
@@ -65,9 +68,13 @@ function App(): React.JSX.Element {
   };
 
   return ( 
-       <View>
-           <Register/>
-       </View>
+       <NavigationContainer>
+          <Stack.Navigator initialRouteName="Homescreen">
+            <Stack.Screen name = "Homescreen" component = {Homescreen} /> 
+            <Stack.Screen name = "Register" component = {Register} />
+            <Stack.Screen name = "Login" component = {Login} />
+          </Stack.Navigator> 
+       </NavigationContainer> 
   )
   }  
 const styles = StyleSheet.create({

@@ -1,16 +1,26 @@
 import { StyleSheet, Text, View,TextInput,TouchableOpacity,SafeAreaView } from 'react-native'
-import React from 'react'
+import React from 'react' 
+import { useNavigation } from '@react-navigation/native'
 
 const Register = () => {
+  const navigation = useNavigation() ;   
   return (
     <View style = {styles.mainContainerRegister}>
          <View style = {styles.registerContainer}>
-              <TextInput keyboardType='text' placeholder="Enter your username" style = {styles.registerTextInput} placeholderTextColor='yellow'   />
+         <View>
+            <Text style={styles.registrationHeading}>Enter your registration details</Text> 
+          </View> 
+              <TextInput type='text' placeholder="Enter your username" style = {styles.registerTextInput} placeholderTextColor='yellow'   />
               <TextInput keyboardType='email-address' placeholder="Enter your email address" style = {styles.registerTextInput2} placeholderTextColor='yellow'  />
               <TextInput type='password' placeholder="Enter password" style = {styles.registerTextInput3} placeholderTextColor='yellow' secureTextEntry={true}  />
               <TouchableOpacity style={styles.registerButton}>
                    <Text style = {styles.registerButtonText}>Register</Text>
               </TouchableOpacity>
+              <View>
+               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                  <Text style={styles.loginHeading}>Already have an account Login Here!</Text>
+               </TouchableOpacity>
+               </View>
          </View>
     </View>
 
@@ -27,11 +37,11 @@ const styles = StyleSheet.create({
      },
      registerContainer : {
           backgroundColor:'black' ,
-          marginLeft:65,
-          marginRight:65,
+          marginLeft:45,
+          marginRight:45,
           color:'yellow' ,
           marginTop:85,
-          height:300,
+          height:320,
           borderRadius:15          
 
      },
@@ -41,7 +51,7 @@ const styles = StyleSheet.create({
           width:'80%',
           borderWidth:1,
           borderColor:'white',
-          marginTop:70,
+          marginTop:30,
           marginLeft:25,
           borderRadius:10,
           color:'yellow',
@@ -78,20 +88,33 @@ const styles = StyleSheet.create({
      registerButton:{
           width:100,
           backgroundColor:'blue',
-          marginLeft:70,
-          marginRight:70,
+          marginLeft:80,
+          marginRight:80,
           borderRadius:5,
           justifyContent:'center',
           alignItems:'center',
           marginTop:20,
           fontSize:25,
           color:'white',
+          height:35
 
      } ,
 
      registerButtonText:{
           color:'white',
-          
+     } ,
+ 
+     registrationHeading:{
+          color:'yellow',
+          fontSize:15,
+          paddingTop:20,
+          paddingLeft:30
+     },
+     loginHeading:{
+          color:'yellow',
+          fontSize:15,
+          paddingTop:20,
+          paddingLeft:16
      }
 
 })
