@@ -20,7 +20,7 @@ const Login = () => {
              console.log(postResponse) ;
              if(postResponse.data && postResponse.data.success){
                   
-                  navigator.navigate("Homescreen")
+                  navigator.navigate("Browsing")
                   Toast.show('Login successfull')     
              }
              else {

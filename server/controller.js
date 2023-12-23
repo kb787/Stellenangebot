@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken') ;
 const registerModel = require('./registrationModel') ;
 const bcryptjs = require('bcryptjs') ;
 const jobsDataModel = require('./jobsDataModel') ;
+const category1 = ['Software Developer' , 'Software Engineer']
+const category2 = ['Web Developer','Mobile App Developer','Full Stack Developer','Frontend Developer','Backend Developer'] ;
+const category3 = ['Machine Learning Engineer','Data Analyst','Data Scientist','DevOps Engineer','Cloud Engineer'] ;
+const category4 = ['Marketing,Sales,Human Resource','Human Resource Manager','Sales Representative','Marketing Specialist',]
 
 const handleRegisterUser = async(req,res) => {
    
@@ -77,9 +81,8 @@ const handleFetchDataDomain1 = async(req,res) => {
        const {jobTitle,jobCompany,jobLocation,jobSkills,jobType} = req.body 
 
        try {
-           let generalData = await jobsDataModel.find() ;
-           const category1 = ['Software Developer' , 'Software Engineer' , 'Web Developer' , 'FullStack Developer' , 'Mobile App Developer']
-           let filteredData = jobsDataModel.find(entry => category1.includes(entry.jobTitle))
+
+           let filteredData = await jobsDataModel.find({ jobTitle: { $in: category1 } })
            if(!filteredData){
                 return res.status(404).send({message:'No matching entries found'})
            }
@@ -93,18 +96,95 @@ const handleFetchDataDomain1 = async(req,res) => {
        }
 }
 
+const handleFetchDataDomain2 = async(req,res) => {
+      const {jobTitle,jobCompany,jobLocation,jobSkills,jobType} = req.body ;
+      try {
+           let filteredData2 = await jobsDataModel.find({jobTitle:{$in : category2}}) 
+           if(!filteredData2){
+                return res.status(404).send({message:'No matching entries found'}) ;
+           }
+           else {
+                return res.send(filteredData2) ;
+           }
+      }
+      catch(error){
+             return res.status(500).send({message:'Unable to perform your request'}) ;
+      }
+}
+
+const handleFetchDataDomain3 = async(req,res) => {
+     const {jobTitle,jobCompany,jobLocation,jobSkills,jobType} = req.body ;
+     try {
+          let filteredData3 = await jobsDataModel.find({jobTitle:{$in : category3}}) 
+          if(!filteredData3){
+               return res.status(404).send({message:'No matching entries found'}) ;
+          }
+          else {
+               return res.send(filteredData3) ;
+          }
+     }
+     catch(error){
+            return res.status(500).send({message:'Unable to perform your request'}) ;
+     }
+}
+
+const handleFetchDataDomain4 = async(req,res) => {
+     const {jobTitle,jobCompany,jobLocation,jobSkills,jobType} = req.body ;
+     try {
+          let filteredData4 = await jobsDataModel.find({jobTitle:{$in : category4}}) 
+          if(!filteredData4){
+               return res.status(404).send({message:'No matching entries found'}) ;
+          }
+          else {
+               return res.send(filteredData4) ;
+          }
+     }
+     catch(error){
+            return res.status(500).send({message:'Unable to perform your request'}) ;
+     }
+}
+
+const handleFetchDataDomain5 = async(req,res) => {
+     const {jobTitle,jobCompany,jobLocation,jobSkills,jobType} = req.body ;
+     try {
+          let filteredData5 = await jobsDataModel.find({jobTitle:{$nin : category1}} && {jobTitle:{$nin : category2}} && {jobTitle:{$nin : category3}} && {jobTitle:{$nin : category4}}) 
+          if(!filteredData5){
+               return res.status(404).send({message:'No matching entries found'}) ;
+          }
+          else {
+               return res.send(filteredData5) ;
+          }
+     }
+     catch(error){
+            return res.status(500).send({message:'Unable to perform your request'}) ;
+     }
+}
+
 const express = require('express') ;
 const registerRouter = express.Router() ;
 const loginRouter = express.Router() ;
 const dataFetchRouter1 = express.Router() ;
+const dataFetchRouter2 = express.Router() ;
+const dataFetchRouter3 = express.Router() ;
+const dataFetchRouter4 = express.Router() ;
+const dataFetchRouter5 = express.Router() ;
 
 registerRouter.post('/postUserRegister',handleRegisterUser) ;
 loginRouter.post('/postUserLogin',handleUserLogin) ;
-dataFetchRouter1.get('/getDataCategory1',handleFetchDataDomain1)
+dataFetchRouter1.get('/getDataCategory1',handleFetchDataDomain1) ;
+dataFetchRouter2.get('/getDataCategory2',handleFetchDataDomain2) ;
+dataFetchRouter3.get('/getDataCategory3',handleFetchDataDomain3) ;
+dataFetchRouter4.get('/getDataCategory4',handleFetchDataDomain4) ;
+dataFetchRouter5.get('/getDataCategory5',handleFetchDataDomain5) ;
 
 
 module.exports = {
       registerRouter:registerRouter,
       loginRouter:loginRouter,
-      dataFetchRouter1:dataFetchRouter1
+      dataFetchRouter1:dataFetchRouter1,
+      dataFetchRouter2:dataFetchRouter2,
+      dataFetchRouter3:dataFetchRouter3,
+      dataFetchRouter4:dataFetchRouter4,
+      dataFetchRouter5:dataFetchRouter5,
+
 }

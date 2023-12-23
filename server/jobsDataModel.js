@@ -11,9 +11,9 @@ const jobDataSchema = mongoose.Schema({
          type:String
       },
       jobSkills:{
-         type:String,
+         type:Array,
       },
-      jobType:{
+      jobLocationType:{
          type:String,
       }
 })

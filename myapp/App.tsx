@@ -22,6 +22,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Register from './components/Authentification/Register';
 import Login from './components/Authentification/Login';
 import Homescreen from './components/MainContent/Homescreen';
+import MainContainer from './components/CardComponents/MainContainer';
 import {
   Colors,
   DebugInstructions,
@@ -73,6 +74,7 @@ function App(): React.JSX.Element {
             <Stack.Screen name = "Homescreen" component = {Homescreen} /> 
             <Stack.Screen name = "Register" component = {Register} />
             <Stack.Screen name = "Login" component = {Login} />
+            <Stack.Screen name = "Browsing" component = {MainContainer} />
           </Stack.Navigator> 
        </NavigationContainer> 
   )
