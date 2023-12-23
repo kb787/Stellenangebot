@@ -1,22 +1,50 @@
 import { StyleSheet, Text, View,TextInput,TouchableOpacity,SafeAreaView } from 'react-native'
-import React from 'react'
+import React,{useState} from 'react' 
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios' 
+import Toast from 'react-native-toast-message'
 
 const Login = () => {
-  const navigation = useNavigation()    
+  const navigator = useNavigation() ;
+
+  const [userEmail,setUserEmail] = useState('') ;
+  const [userPassword,setUserPassword] = useState('') ;
+  
+  const handleRegisterButtonClick = async() => {
+        try {
+             const postResponse = await axios.post("http://192.168.43.148:3500/v2/api/postUserLogin",{
+                    userEmail:userEmail,
+                    userPassword:userPassword
+                }
+             )
+             console.log(postResponse) ;
+             if(postResponse.data && postResponse.data.success){
+                  
+                  navigator.navigate("Homescreen")
+                  Toast.show('Login successfull')     
+             }
+             else {
+                  Toast.show('Invalid credentials')
+             }
+        }
+        catch(error){
+             console.log(error) 
+             Toast.show('Server side error occured') 
+        } 
+  }   
   return (
     <View style = {styles.mainContainerRegister}>
          <View style = {styles.registerContainer}>
          <View>
             <Text style={styles.registrationHeading}>Verify your credentials</Text> 
           </View> 
-              <TextInput keyboardType='email-address' placeholder="Enter your email address" style = {styles.registerTextInput2} placeholderTextColor='yellow'  />
-              <TextInput type='password' placeholder="Enter password" style = {styles.registerTextInput3} placeholderTextColor='yellow' secureTextEntry={true}  />
-              <TouchableOpacity style={styles.registerButton}>
+              <TextInput keyboardType='email-address' placeholder="Enter your email address" style = {styles.registerTextInput2} placeholderTextColor='yellow' value = {userEmail} onChangeText = {(text) => setUserEmail(text) }  />
+              <TextInput type='password' placeholder="Enter password" style = {styles.registerTextInput3} placeholderTextColor='yellow' secureTextEntry={true} value = {userPassword} onChangeText = {(text) => setUserPassword(text)}   />
+              <TouchableOpacity style={styles.registerButton} onPress={handleRegisterButtonClick}>
                    <Text style = {styles.registerButtonText}>Login</Text>
               </TouchableOpacity>
               <View>
-               <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+               <TouchableOpacity onPress={() => navigator.navigate("Register")}>
                   <Text style={styles.loginHeading}>Not having an account Register Here!</Text>
                </TouchableOpacity>
                </View>
