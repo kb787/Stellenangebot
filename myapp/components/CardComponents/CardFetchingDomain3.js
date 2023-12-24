@@ -4,12 +4,12 @@ import Toast from "react-native-toast-message";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {View,Text,StyleSheet} from 'react-native' 
 
-const CardFetchingDomain2 = () => {
+const CardFetchingDomain3 = () => {
      const [data,setData] = useState([]) ;
      useEffect(() => {
           const handleFetchGeneralJobsData = async() => {
                 try {
-                    let fetchResponse = await fetch("http://192.168.43.148:3500/v5/api/getDataCategory3") ;
+                    let fetchResponse = await fetch("http://192.168.43.148:3500/v6/api/getDataCategory4") ;
                     if(!fetchResponse){
                          Toast.show({
                             type:'error',
@@ -59,7 +59,7 @@ const CardFetchingDomain2 = () => {
           )
 }
 
-export default CardFetchingDomain2;
+export default CardFetchingDomain3;
 
 const styles = StyleSheet.create(
     {   

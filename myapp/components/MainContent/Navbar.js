@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View,SafeAreaView,TextInput,TouchableOpacity } from 'react-native'
-// import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome' 
-// import {faBell,faMessage,faSuitcase,faUser} from '@fortawesome/free-solid-svg-icons'
+import { StyleSheet, Text, View,SafeAreaView,TextInput,TouchableOpacity,ScrollView } from 'react-native'
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome' 
+import {faBell,faMessage,faSuitcase,faUser} from '@fortawesome/free-solid-svg-icons'
 import React from 'react' ;
 
 const Navbar = () => {
    return (
-       <SafeAreaView>
-           <View style = {styles.mainContainerNavbar}>
+         <View style = {styles.mainContainerNavbar}>
+            <ScrollView horizontal = {true}>
                 <View style = {styles.mainSubContainer}>
                     <Text style = {styles.navbarTitle}>
                        Stellenangebot
@@ -19,15 +19,14 @@ const Navbar = () => {
                        placeholder="Enter your preferred location"
                        style = {styles.navbarInputForms}
                     />
-                  {/*  
-                    <FontAwesomeIcon icon = {faMessage} />
-                    <FontAwesomeIcon icon = {faBell} />
-                    <FontAwesomeIcon icon = {faSuitcase} />
-                    <FontAwesomeIcon icon = {faUser} />
-                  */}  
-                </View>
-           </View>
-       </SafeAreaView>
+                    <FontAwesomeIcon icon = {faMessage} style={styles.fontItem} size = {25} />
+                    <FontAwesomeIcon icon = {faBell} style={styles.fontItem} size = {25} />
+                    <FontAwesomeIcon icon = {faSuitcase} style={styles.fontItem} size = {25} />
+                    <FontAwesomeIcon icon = {faUser} style={styles.fontItem} size = {25} /> 
+                </View>  
+            </ScrollView>          
+         </View>
+
 
    )
 }
@@ -50,18 +49,32 @@ const styles = StyleSheet.create(
           alignContent:'flex-start'
           } ,
        navbarTitle : {
-          fontSize:10 ,
+          fontSize:15 ,
           color:'yellow',
           paddingTop:9 
          } ,
        navbarInputForms : {
           color:'yellow',
-          width:'22%',
+          width:'23%',
           height:10,
           borderWidth:1 ,
           borderColor:'white',
-          marginTop:5,
-          alignItems:'flex-start'
+          marginTop:7.5,
+          alignItems:'flex-start',
+          borderRadius:12,
+          marginLeft:10,
        },
+       fontItem : {
+           color:'yellow',
+           width:12,
+           height:12,
+           marginLeft:20,
+           marginTop:6
+           
+       },
+       scrolling : {
+          width:800
+       }
+
    }
 )
