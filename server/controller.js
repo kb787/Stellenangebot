@@ -2,10 +2,26 @@ const jwt = require('jsonwebtoken') ;
 const registerModel = require('./registrationModel') ;
 const bcryptjs = require('bcryptjs') ;
 const jobsDataModel = require('./jobsDataModel') ;
+const userProfileModel = require('./userProfileModel') ;
 const category1 = ['Software Developer' , 'Software Engineer']
 const category2 = ['Web Developer','Mobile App Developer','Full Stack Developer','Frontend Developer','Backend Developer'] ;
 const category3 = ['Machine Learning Engineer','Data Analyst','Data Scientist','DevOps Engineer','Cloud Engineer'] ;
-const category4 = ['Marketing,Sales,Human Resource','Human Resource Manager','Sales Representative','Marketing Specialist',]
+const category4 = ['Marketing,Sales,Human Resource','Human Resource Manager','Sales Representative','Marketing Specialist',] ;
+const multer = require('multer') ;
+const authenticated = require('./middleware') ;
+
+
+const createdStorage = multer.diskStorage(
+     {
+         destination:function(req,file,cb){
+            cb(null,'profiles/') ;
+         },
+         filename:function(req,file,cb){
+           cb(null,Date.now()) ;
+         } 
+     }
+  )
+const fileUpload = multer({storage:createdStorage}) ;
 
 const handleRegisterUser = async(req,res) => {
    
@@ -77,6 +93,71 @@ const handleUserLogin = async(req,res) => {
     }
 }
 
+const handlePostUserProfile = async(req,res) => {
+
+     const {userImage,userFullName,userJobTitle,userProfileDescription,userSkills,userUniversityName,userDegreeName,userDegreeTime,userDegreeGPA,userPreferredLocation,userPreferredLocationType,userCompanyName,userWorkDescription,userWorkTenure,projectName,projectDescription,projectLink} = req.body ;
+     try { 
+
+            if(!userFullName) {
+                return res.status(406).send({message:'Fill the mandatory fields'}) ;
+            }
+            const newUser = await new userProfileModel({userImage:fileUpload,userFullName,userJobTitle,userProfileDescription,userSkills,userUniversityName,userDegreeName,userDegreeTime,userDegreeGPA,userPreferredLocation,userPreferredLocationType,userCompanyName,userWorkDescription,userWorkTenure,projectName,projectDescription,projectLink})
+            const savedUser = await newUser.save() ;
+            console.log(savedUser) ;
+            return res.status(201).send({message:'Profile details saved successfully',success:true,savedUser}) ;  
+     }
+     catch(error){
+            return res.status(500).send({message:'Server side error occured',success:false}) ;
+     }
+}
+
+const handleUpdateUserProfile = async(req,res) => {
+     const {userImage,userFullName,userJobTitle,userProfileDescription,userSkills,userEducation,userPreferredLocation,userPreferredLocationType,userExperience,userProjects} = req.body ;
+     console.log(req.body) ;
+      try {
+
+            let targetedUser = await userProfileModel.findOne({_id:req.body._id})
+            if(!targetedUser) {
+                 return res.status(404).send({message:'Profile not found',success:false}) ;
+            }
+            let updatedUser = await userProfileModel.findOneAndUpdate(
+               {_id:targetedUser._id} , 
+               {
+                  $set : {
+                      userImage:userImage,
+                      userFullName:userFullName,
+                      userJobTitle:userJobTitle,
+                      userProfileDescription:userProfileDescription,
+                      userSkills:userSkills,
+                      userEducation:userEducation,
+                      userPreferredLocation:userPreferredLocation,
+                      userPreferredLocationType:userPreferredLocationType,
+                      userExperience:userExperience,
+                      userProjects:userProjects
+                  }  
+               }
+            )
+            const savedUser = updatedUser.save() ;
+            console.log(savedUser) ;
+            return res.status(201).send({message:'Profile updated successfully',success:true,savedUser})
+      }
+      catch(error) {
+           console.log(error) ;
+           return res.status(500).send({message:'Unable to perform the request',success:false}) ;
+      }
+}
+/*
+const handleDeleteProfileData = async(req,res) => {
+
+     try {
+
+     }
+     catch(error) {
+           console.log(error) ;
+           return res.status(500).send({message:'Unable to perform the request'}) ;
+     }
+}
+*/
 const handleFetchDataDomain1 = async(req,res) => {
        const {jobTitle,jobCompany,jobLocation,jobSkills,jobType} = req.body 
 
@@ -168,6 +249,7 @@ const dataFetchRouter2 = express.Router() ;
 const dataFetchRouter3 = express.Router() ;
 const dataFetchRouter4 = express.Router() ;
 const dataFetchRouter5 = express.Router() ;
+const profilePostingRouter = express.Router() ;
 
 registerRouter.post('/postUserRegister',handleRegisterUser) ;
 loginRouter.post('/postUserLogin',handleUserLogin) ;
@@ -176,6 +258,7 @@ dataFetchRouter2.get('/getDataCategory2',handleFetchDataDomain2) ;
 dataFetchRouter3.get('/getDataCategory3',handleFetchDataDomain3) ;
 dataFetchRouter4.get('/getDataCategory4',handleFetchDataDomain4) ;
 dataFetchRouter5.get('/getDataCategory5',handleFetchDataDomain5) ;
+profilePostingRouter.post('/postUserProfile',fileUpload.single('profileImage'),handlePostUserProfile,authenticated) ;
 
 
 module.exports = {
@@ -186,5 +269,6 @@ module.exports = {
       dataFetchRouter3:dataFetchRouter3,
       dataFetchRouter4:dataFetchRouter4,
       dataFetchRouter5:dataFetchRouter5,
+      profilePostingRouter:profilePostingRouter
 
 }

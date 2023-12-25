@@ -4,7 +4,7 @@ const http = require('http') ;
 const server = http.createServer(app) ;
 const cors = require('cors') ;
 const Connection = require('./configure') ;
-const {registerRouter,loginRouter,dataFetchRouter1,dataFetchRouter2,dataFetchRouter3,dataFetchRouter4,dataFetchRouter5}  = require('./controller') ;
+const {registerRouter,loginRouter,dataFetchRouter1,dataFetchRouter2,dataFetchRouter3,dataFetchRouter4,dataFetchRouter5,profilePostingRouter}  = require('./controller') ;
 
 const corsOptions = {
     origin:"http://192.168.43.148:8081",
@@ -23,6 +23,7 @@ app.use('/v4/api',dataFetchRouter2) ;
 app.use('/v5/api',dataFetchRouter3) ;
 app.use('/v6/api',dataFetchRouter4) ;
 app.use('/v7/api',dataFetchRouter5) ;
+app.use('/v8/api',profilePostingRouter) ;
 Connection() ;
 
 server.listen("3500", () => {

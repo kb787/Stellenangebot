@@ -2,8 +2,11 @@ import { StyleSheet, Text, View,SafeAreaView,TextInput,TouchableOpacity,ScrollVi
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome' 
 import {faBell,faMessage,faSuitcase,faUser} from '@fortawesome/free-solid-svg-icons'
 import React from 'react' ;
+import { useNavigation } from '@react-navigation/native'
+
 
 const Navbar = () => {
+   const navigator = useNavigation() ;
    return (
          <View style = {styles.mainContainerNavbar}>
             <ScrollView horizontal = {true}>
@@ -19,10 +22,18 @@ const Navbar = () => {
                        placeholder="Enter your preferred location"
                        style = {styles.navbarInputForms}
                     />
+                    <TouchableOpacity>
                     <FontAwesomeIcon icon = {faMessage} style={styles.fontItem} size = {25} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
                     <FontAwesomeIcon icon = {faBell} style={styles.fontItem} size = {25} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress = {() => navigator.navigate("Browsing")}>
                     <FontAwesomeIcon icon = {faSuitcase} style={styles.fontItem} size = {25} />
-                    <FontAwesomeIcon icon = {faUser} style={styles.fontItem} size = {25} /> 
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress = {() => navigator.navigate("NewUserProfile")}>
+                    <FontAwesomeIcon icon = {faUser} style={styles.fontItem} size = {25} />
+                    </TouchableOpacity> 
                 </View>  
             </ScrollView>          
          </View>

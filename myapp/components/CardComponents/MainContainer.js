@@ -49,7 +49,8 @@ const styles = StyleSheet.create(
            fontSize:22,
            color:'yellow',
            textAlign:'left',
-           fontWeight:'bold'
+           fontWeight:'bold',
+           marginTop:15
       } ,
       mainPageHeadingContainer : {
           backgroundColor:'black',

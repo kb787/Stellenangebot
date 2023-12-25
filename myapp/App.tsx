@@ -23,6 +23,7 @@ import Register from './components/Authentification/Register';
 import Login from './components/Authentification/Login';
 import Homescreen from './components/MainContent/Homescreen';
 import MainContainer from './components/CardComponents/MainContainer';
+import NewUserProfile from './components/User/NewUserProfile';
 import {
   Colors,
   DebugInstructions,
@@ -75,6 +76,7 @@ function App(): React.JSX.Element {
             <Stack.Screen name = "Register" component = {Register} />
             <Stack.Screen name = "Login" component = {Login} />
             <Stack.Screen name = "Browsing" component = {MainContainer} />
+            <Stack.Screen name = "NewUserProfile" component = {NewUserProfile} />
           </Stack.Navigator> 
        </NavigationContainer> 
   )
