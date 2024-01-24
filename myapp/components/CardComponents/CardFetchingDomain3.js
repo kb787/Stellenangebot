@@ -9,7 +9,7 @@ const CardFetchingDomain3 = () => {
      useEffect(() => {
           const handleFetchGeneralJobsData = async() => {
                 try {
-                    let fetchResponse = await fetch("http://192.168.43.148:3500/v6/api/getDataCategory4") ;
+                    let fetchResponse = await fetch("http://192.168.43.148:3500/data/api/getDataCategory4") ;
                     if(!fetchResponse){
                          Toast.show({
                             type:'error',

@@ -69,16 +69,9 @@ const handleUserLogin = async(req,res) => {
               return res.status(406).send({message:'Invalid credentials',success:false}) 
           }
           else {
-            const token = jwt.sign({id:comparisonOutput._id},process.env.secret_key,{
+            const token = jwt.sign({id:loginResponse._id},process.env.secret_key,{
                 expiresIn:"1d"
-            }) 
-     /*       
-            const loginCookie = {
-                _id : comparisonOutput._id,
-                email : comparisonOutput.email 
-            }    
-              res.cookie(loginCookie) ; 
-      */         
+            })          
               return res.status(201).send({message:'Login successfull',success:true,token}) ;
           }     
     }

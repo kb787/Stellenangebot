@@ -10,7 +10,7 @@ import Navbar from "../MainContent/Navbar";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import jwt_decode from 'jwt-decode';
+import jwt_decode, { jwtDecode } from 'jwt-decode';
 
 library.add(faUserTie) ;
 const GeneralCard = () => {
@@ -21,6 +21,25 @@ const GeneralCard = () => {
      const handleNavigateById = (userId) => {
         navigation.navigate("IndividualCard",{userId}) ;
      }
+
+     const handleFetchIdFromToken = async() => {
+         try {
+             const token = await AsyncStorage.getItem('token') ;
+             if(!token){
+                Alert.alert('No token found ! complete login first') ;
+             }
+             else {
+                const decodedToken = jwtDecode(token) ;
+                const userId = decodedToken._id ;
+                return userId ;
+             } 
+         }
+         catch(error){
+            console.log(error) ;
+         }
+     }
+
+     const profileId = handleFetchIdFromToken() ;
      const handleFollowUser = async(myId,followId) => {
         try {
            const followResponse = await axios.put(`http://192.168.43.148:3500/connection/api/followNewAccount/${followId}`,{myId}) ;
@@ -67,21 +86,6 @@ const GeneralCard = () => {
             ) 
        }
    } 
-   
-        const fetchCookieData = async() => {
-            try {
-                let cookieData = await CookieManager.get("http://192.168.43.148:3500") ;
-                if(!cookieData){
-                    Alert.alert('No cookie found complete the authentication steps first')
-                }
-                let userCookieDataParsed = JSON.parse(cookieData.loginCookie) ;
-                let userId = userCookieDataParsed._id ;
-                return userId ;
-            }
-            catch(error){
-                 console.log(error) ;
-            }  
-        }
     
      useEffect(() => {
           const handleFetchGeneralNetworkData = async() => {
@@ -109,10 +113,7 @@ const GeneralCard = () => {
                 }
           }
           handleFetchGeneralNetworkData()},[])
-
-          let personId
-          personId = fetchDataToken() ;
-  
+    
 
           return  ( 
         <ScrollView>    
@@ -130,7 +131,7 @@ const GeneralCard = () => {
                          <View style = {styles.iconWrapping}> 
                          <FontAwesomeIcon icon = {faUserTie} style={styles.cardIconStyling} size={32} />
                          </View> 
-                         <TouchableOpacity style = {styles.buttonStyling} onPress = {() => (following ? handleUnfollowUser(personId,item._id) : handleFollowUser(personId,item._id))}>
+                         <TouchableOpacity style = {styles.buttonStyling} onPress = {() => (following ? handleUnfollowUser(profileId,item._id) : handleFollowUser(profileId,item._id))}>
                               <Text style = {styles.buttonTextStyling}>{following ? "Unfollow" : "Follow" }</Text>     
                          </TouchableOpacity>   
                          <TouchableOpacity style = {styles.buttonStyling}>
