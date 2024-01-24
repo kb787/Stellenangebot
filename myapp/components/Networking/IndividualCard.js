@@ -34,7 +34,7 @@ const IndividualCard = () => {
          const handleFetchNetworkDataById = async() => {
                try {
               
-                   let fetchResponse = await fetch(`http://192.168.43.148:3500/v13/api/getIndividualNetworkData/${userId}`) ;
+                   let fetchResponse = await fetch(`http://192.168.43.148:3500/network/api/getIndividualNetworkData/${userId}`) ;
                    if(!fetchResponse.ok){
                         Toast.show({
                            type:'error',

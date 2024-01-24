@@ -113,7 +113,7 @@ const NewUserProfile = () => {
    }
   const handleNewUserProfile = async() => {
         try {
-             const postResponse = await axios.post("http://192.168.43.148:3500/v8/api/postUserProfile",{
+             const postResponse = await axios.post("http://192.168.43.148:3500/profile/api/postUserProfile",{
                     userImage:userImage,
                     userFullName:userFullName,
                     userJobTitle:userJobTitle,

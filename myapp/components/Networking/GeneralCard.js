@@ -23,7 +23,7 @@ const GeneralCard = () => {
      }
      const handleFollowUser = async(myId,followId) => {
         try {
-           const followResponse = await axios.put(`http://192.168.43.148:3500/v14/api/followNewAccount/${followId}`,{myId}) ;
+           const followResponse = await axios.put(`http://192.168.43.148:3500/connection/api/followNewAccount/${followId}`,{myId}) ;
            if(!followResponse){
                 Toast.show(
                     {
@@ -46,7 +46,7 @@ const GeneralCard = () => {
 
    const handleUnfollowUser = async(myId,followId) => {
        try {
-           const unfollowResponse = await axios.put(`http://192.168.43.148:3500/v15/api/unfollowAccount/${followId}`, {myId}) ;
+           const unfollowResponse = await axios.put(`http://192.168.43.148:3500/connection/api/unfollowAccount/${followId}`, {myId}) ;
            if(!unfollowResponse){
             Toast.show(
                 {
@@ -86,7 +86,7 @@ const GeneralCard = () => {
      useEffect(() => {
           const handleFetchGeneralNetworkData = async() => {
                 try {
-                    let fetchResponse = await fetch("http://192.168.43.148:3500/v12/api/getAllNetworkData") ;
+                    let fetchResponse = await fetch("http://192.168.43.148:3500/network/api/getAllNetworkData") ;
                     if(!fetchResponse.ok){
                          Toast.show({
                             type:'error',

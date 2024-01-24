@@ -42,7 +42,7 @@ const PrevUserProfile = () => {
                    if(myId === null){
                       Alert.alert("Cannot get your profile details")
                    }
-                   let fetchResponse = await fetch(`http://192.168.43.148:3500/v9/api/getUserProfile/${myId}`) ;
+                   let fetchResponse = await fetch(`http://192.168.43.148:3500/profile/api/getUserProfile/${myId}`) ;
                    if(!fetchResponse.ok){
                         Toast.show({
                            type:'error',
