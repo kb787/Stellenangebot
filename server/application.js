@@ -21,8 +21,8 @@ app.get("/",(req,res) => {
 app.use(express.json()) ;
 app.use(cookieParser) ;
 app.use(cors(corsOptions)) ;
-app.use('/v1/api',registerRouter) ;
-app.use('/v2/api',loginRouter) ;
+app.use('/auth/api',registerRouter) ;
+app.use('/auth/api',loginRouter) ;
 app.use('/v3/api',dataFetchRouter1) ;
 app.use('/v4/api',dataFetchRouter2) ;
 app.use('/v5/api',dataFetchRouter3) ;

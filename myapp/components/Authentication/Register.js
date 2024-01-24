@@ -12,7 +12,7 @@ const Register = () => {
   
   const handleRegisterButtonClick = async() => {
         try {
-             const postResponse = await axios.post("http://192.168.43.148:3500/v1/api/postUserRegister",{
+             const postResponse = await axios.post("http://192.168.43.148:3500/auth/api/postUserRegister",{
                     userName:userName,
                     userEmail:userEmail,
                     userPassword:userPassword

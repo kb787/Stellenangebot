@@ -12,7 +12,7 @@ const Login = () => {
   
   const handleRegisterButtonClick = async() => {
         try {
-             const postResponse = await axios.post("http://192.168.43.148:3500/v2/api/postUserLogin",{
+             const postResponse = await axios.post("http://192.168.43.148:3500/auth/api/postUserLogin",{
                     userEmail:userEmail,
                     userPassword:userPassword
                 }
