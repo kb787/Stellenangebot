@@ -15,15 +15,11 @@ const validateAuthenticatedUser = async(req,res,next) => {
               throw new Error('No token found') ;
           }
           else {
-              jwt.verify(token,process.env.secret_key,(error,decoded) => {
-                   if(error){
-                      console.log(error) ;
-                      throw new Error('Invalid token') ;
-                   }
-                   req.decoded = decoded ;
-                   next() ;
-              })
+              const decodedToken = jwt.verify(token,process.env.secret_key) ;
+              req.userId = decodedToken.id ;
+              next() ; 
           }
+       
     }
     catch(error){
           console.log(error) ;

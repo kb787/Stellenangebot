@@ -6,13 +6,9 @@ const category1 = ['Software Developer' , 'Software Engineer']
 const category2 = ['Web Developer','Mobile App Developer','Full Stack Developer','Frontend Developer','Backend Developer'] ;
 const category3 = ['Machine Learning Engineer','Data Analyst','Data Scientist','DevOps Engineer','Cloud Engineer'] ;
 const category4 = ['Marketing,Sales,Human Resource','Human Resource Manager','Sales Representative','Marketing Specialist'] ;
-const authenticated = require('./middleware') ;
-
-
 
 
 const handleRegisterUser = async(req,res) => {
-   
    const {userName,userEmail,userPassword} = req.body ;
     if((!userName) || (!userEmail) || (!userPassword)) {
           return res.status(400).send({message:'Entering all field is mandatory',success:false}) ;
@@ -43,6 +39,30 @@ const handleRegisterUser = async(req,res) => {
  
 }
 
+const tokenValidation = (token) => {
+      try {
+         const parts = token.split('.') ;
+         if(parts.length !== 3){
+             throw new Error('Invalid token format') ;
+         }
+         const [header,payload,signature] = parts ;
+         const headerDecode = JSON.parse(Buffer.from(header,'base64').toString('utf-8')) ;
+         const payloadDecode = JSON.parse(Buffer.from(payload,'base64').toString('utf-8')) ;
+         if((!headerDecode) || (!payloadDecode)){
+             throw new Error('Invalid token content') ;   
+         }
+         const signatureValidation = jwt.verify(token,process.env.secret_key) ; 
+         if(!signatureValidation){
+            throw new Error('Invalid token signature') ;
+         }
+         console.log(payloadDecode) ;
+      }
+      catch(error){
+          console.log(error) ;
+          return false;
+      }
+}
+
 const handleUserLogin = async(req,res) => {
     const {userEmail,userPassword} = req.body ;
     console.log(req.body) ;
@@ -71,8 +91,18 @@ const handleUserLogin = async(req,res) => {
           else {
             const token = jwt.sign({id:loginResponse._id},process.env.secret_key,{
                 expiresIn:"1d"
-            })          
-              return res.status(201).send({message:'Login successfull',success:true,token}) ;
+            })  
+              const result = tokenValidation(token) ;
+              const convertedToken = {
+                  id:token.id ,
+                  email:token.userEmail
+              } 
+              if(result === true){  
+                 return res.status(201).send({message:'Login successfull',success:true,convertedToken}) ;
+              }
+              else {
+                  return res.status(400).send({message:'Invalid token format'}) ;
+              }  
           }     
     }
     catch(error) {
@@ -82,18 +112,7 @@ const handleUserLogin = async(req,res) => {
 }
 
 
-/*
-const handleDeleteProfileData = async(req,res) => {
 
-     try {
-
-     }
-     catch(error) {
-           console.log(error) ;
-           return res.status(500).send({message:'Unable to perform the request'}) ;
-     }
-}
-*/
 const handleFetchDataDomain1 = async(req,res) => {
        const {jobTitle,jobCompany,jobLocation,jobSkills,jobType} = req.body 
 

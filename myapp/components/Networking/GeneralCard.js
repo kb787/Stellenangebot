@@ -16,6 +16,7 @@ library.add(faUserTie) ;
 const GeneralCard = () => {
      const [data,setData] = useState([]) ;
      const [following,setFollowing] = useState(false) ;
+     const [profileId,setProfileId] = useState(null)
      const navigation = useNavigation() ;
 
      const handleNavigateById = (userId) => {
@@ -31,7 +32,7 @@ const GeneralCard = () => {
              else {
                 const decodedToken = jwtDecode(token) ;
                 const userId = decodedToken._id ;
-                return userId ;
+                setProfileId(userId) ;
              } 
          }
          catch(error){
@@ -39,10 +40,14 @@ const GeneralCard = () => {
          }
      }
 
-     const profileId = handleFetchIdFromToken() ;
+     useEffect(() => {
+        handleFetchIdFromToken();
+    }, []);
+
      const handleFollowUser = async(myId,followId) => {
         try {
-           const followResponse = await axios.put(`http://192.168.43.148:3500/connection/api/followNewAccount/${followId}`,{myId}) ;
+           handleFetchIdFromToken() 
+           const followResponse = await axios.put(`http://192.168.43.148:3500/connection/api/followNewAccount/${followId}`,{profileId:myId}) ;
            if(!followResponse){
                 Toast.show(
                     {

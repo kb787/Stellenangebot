@@ -1,4 +1,5 @@
 const registerModel = require('./registrationModel') ;
+const validateAuthenticatedUser = require('./middleware') ;
 
 const handleFollowFeature = async(req,res) => {
     try {
@@ -55,8 +56,8 @@ const express = require('express') ;
 const followRouter = express.Router() ;
 const unfollowRouter =  express.Router() ;
 
-followRouter.put(`/followNewAccount/:_id`,handleFollowFeature) ;
-unfollowRouter.put(`/unfollowAccount/:_id`,handleUnfollowFeature) ;
+followRouter.put(`/followNewAccount/:_id`,validateAuthenticatedUser,handleFollowFeature) ;
+unfollowRouter.put(`/unfollowAccount/:_id`,validateAuthenticatedUser,handleUnfollowFeature) ;
 
 
 module.exports = {
