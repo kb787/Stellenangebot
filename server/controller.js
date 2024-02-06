@@ -6,7 +6,8 @@ const category1 = ['Software Developer' , 'Software Engineer']
 const category2 = ['Web Developer','Mobile App Developer','Full Stack Developer','Frontend Developer','Backend Developer'] ;
 const category3 = ['Machine Learning Engineer','Data Analyst','Data Scientist','DevOps Engineer','Cloud Engineer'] ;
 const category4 = ['Marketing,Sales,Human Resource','Human Resource Manager','Sales Representative','Marketing Specialist'] ;
-
+const connectDatabaseAndInsertData = require('./cookieCreation') ;
+const cookieModel = require('./cookieModel') ;
 
 const handleRegisterUser = async(req,res) => {
    const {userName,userEmail,userPassword} = req.body ;
@@ -23,13 +24,8 @@ const handleRegisterUser = async(req,res) => {
               const password = req.body.userPassword ;
               const hashedPassword =  await bcryptjs.hash(password,salt) ;
               const newResponse = await new registerModel({userName,userEmail,userPassword:hashedPassword}) ;
-              const savedUser = await newResponse.save({userName,userEmail,userPassword:hashedPassword}) ;  
-              const userDetails = {
-                  userName:savedUser.userName,
-                  userEmail:savedUser.userEmail
-              }
-              console.log(userDetails) ; 
-              return res.status(201).send({message:'Successfully done the registration',success:true,userDetails}) ;         
+              await newResponse.save({userName,userEmail,userPassword:hashedPassword}) ;  
+              return res.status(201).send({message:'Successfully done the registration',success:true}) ;         
          }
     }
     catch(error){
@@ -78,7 +74,7 @@ const handleUserLogin = async(req,res) => {
              return res.status(404).send({message:'Invalid email',success:false}) ;
           }
           else if(!loginResponse.userPassword){
-             return res.status(405).send({message:'Invalid user',success:false}) ;  
+             return res.status(404).send({message:'Invalid user',success:false}) ;  
           }
           const userDetails = {
                userEmail: loginResponse.userEmail
@@ -86,13 +82,15 @@ const handleUserLogin = async(req,res) => {
           console.log(userDetails) ;
           comparisonOutput = await bcryptjs.compare(userPassword,loginResponse.userPassword) ;
           if(!comparisonOutput){
-              return res.status(406).send({message:'Invalid credentials',success:false}) 
+              return res.status(404).send({message:'Invalid credentials',success:false}) 
           }
           else {
-            const token = jwt.sign({id:loginResponse._id},process.env.secret_key,{
-                expiresIn:"1d"
-            })  
-              const result = tokenValidation(token) ;
+          //  const token = jwt.sign({id:loginResponse._id},process.env.secret_key,{
+          //      expiresIn:"1d"
+          //  })  
+           // Focus on Cookie Creation Mechanism
+           //   const result = tokenValidation(token) ;
+           /*   
               const convertedToken = {
                   id:token.id ,
                   email:token.userEmail
@@ -100,10 +98,24 @@ const handleUserLogin = async(req,res) => {
               if(result === true){  
                  return res.status(201).send({message:'Login successfull',success:true,convertedToken}) ;
               }
+
               else {
                   return res.status(400).send({message:'Invalid token format'}) ;
               }  
-          }     
+          */
+            const requiredUserId = loginResponse._id ;
+            const requiredEmail = loginResponse.userEmail ;
+            let prevId ;
+            prevId = await cookieModel.findOne(loginResponse._id) ;
+            if(prevId) {
+               return res.status(201).send({message:'Login Successfull',success:true})
+            }
+            else {
+             connectDatabaseAndInsertData(requiredUserId,requiredEmail) ;
+             return res.status(201).send({message:'Login Successfull',success:true}) ;  
+            }   
+          }   
+
     }
     catch(error) {
          console.log(error) ;

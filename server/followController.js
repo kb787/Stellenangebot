@@ -1,14 +1,18 @@
 const registerModel = require('./registrationModel') ;
-const validateAuthenticatedUser = require('./middleware') ;
+//  const validateAuthenticatedUser = require('./middleware') ;
+const validateCookie = require('./cookieValidator') ;
 
 const handleFollowFeature = async(req,res) => {
     try {
+        
       const myId = req.body._id ;
       const {followId} = req.params ;
-       
+      const result = validateCookie(myId) ;
+      if(result === false){
+         return res.status(400).send({message:'No cookie found complete your authentication first'}) ; 
+      } 
       const currentUser = await registerModel.findById({myId}) ;
       const expectedUser = await registerModel.findById({followId}) ;
-      
       if(currentUser.following.includes(expectedUser)){
           return res.status(400).send("Already following the user") ;
       }
@@ -56,8 +60,8 @@ const express = require('express') ;
 const followRouter = express.Router() ;
 const unfollowRouter =  express.Router() ;
 
-followRouter.put(`/followNewAccount/:_id`,validateAuthenticatedUser,handleFollowFeature) ;
-unfollowRouter.put(`/unfollowAccount/:_id`,validateAuthenticatedUser,handleUnfollowFeature) ;
+followRouter.patch(`/followNewAccount/:_id`,handleFollowFeature) ;
+unfollowRouter.patch(`/unfollowAccount/:_id`,handleUnfollowFeature) ;
 
 
 module.exports = {
