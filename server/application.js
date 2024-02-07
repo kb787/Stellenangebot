@@ -2,24 +2,34 @@ const express = require('express') ;
 const app = express() ;
 const http = require('http') ;
 const server = http.createServer(app) ;
+const chatApp = express() ;
+const chatServer = http.createServer(chatApp) ;
+const io = require('socket.io')(chatServer) ;
 const cors = require('cors') ;
 const Connection = require('./configure') ;
 const {registerRouter,loginRouter,dataFetchRouter1,dataFetchRouter2,dataFetchRouter3,dataFetchRouter4,dataFetchRouter5}  = require('./controller') ;
 const {profilePostingRouter,profileGetRouter,profileUpdateRouter,profileDeleteRouter} = require('./userProfileController') ;
 const {networkAllFetchRouter,networkIndividFetchRouter} = require('./networkController') ;
 const {followRouter,unfollowRouter} = require('./followController') ;
-// const cookieParser = require('cookie-parser') ;
+
 
 const corsOptions = {
     origin:"http://192.168.43.148:8081",
 }
 
+io.on("connection",(socket) => {
+    console.log(socket) ;
+
+    socket.on("chat",(payload) => {
+        console.log(payload) ;
+        io.emit("chat",payload) ;
+    })
+})
 app.get("/",(req,res) => {
     res.send("The application is running") ;
 })
 
 app.use(express.json()) ;
-// app.use(cookieParser) ;
 app.use(cors(corsOptions)) ;
 app.use('/auth/api',registerRouter) ;
 app.use('/auth/api',loginRouter) ;
@@ -39,5 +49,8 @@ app.use('/connection/api',unfollowRouter) ;
 Connection() ;
 
 server.listen("3500", () => {
-      console.log("App launched successfully") ;  
+    console.log("App launched successfully") ;  
+})
+chatServer.listen("4000", () => {
+    console.log("Chat server is running") ;  
 })
