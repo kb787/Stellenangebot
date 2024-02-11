@@ -3,7 +3,6 @@ import React,{useState} from 'react'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios' 
 import Toast from 'react-native-toast-message'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 const Login = () => {
   const navigator = useNavigation() ;
   const [userEmail,setUserEmail] = useState('') ;
@@ -17,10 +16,7 @@ const Login = () => {
                 }
              )
              console.log(postResponse) ;
-             if(postResponse.data && postResponse.data.success){
-
-                  const token = postResponse.data.convertedToken ;
-                  await AsyncStorage.setItem('token',token) ;   
+             if(postResponse.data && postResponse.data.success){ 
                   navigator.navigate("Browsing")
                   Toast.show('Login successfull')     
              }

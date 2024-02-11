@@ -11,8 +11,7 @@ const {registerRouter,loginRouter,dataFetchRouter1,dataFetchRouter2,dataFetchRou
 const {profilePostingRouter,profileGetRouter,profileUpdateRouter,profileDeleteRouter} = require('./userProfileController') ;
 const {networkAllFetchRouter,networkIndividFetchRouter} = require('./networkController') ;
 const {followRouter,unfollowRouter} = require('./followController') ;
-
-
+const {sendConnectionRequestRouter,unsendConnectionRequestRouter,acceptConnectionRequestRouter,cancelConnectionRequestRouter} = require('./connectionController') ;
 const corsOptions = {
     origin:"http://192.168.43.148:8081",
 }
@@ -46,8 +45,11 @@ app.use('/network/api',networkAllFetchRouter) ;
 app.use('/network/api',networkIndividFetchRouter) ;
 app.use('/connection/api',followRouter) ;
 app.use('/connection/api',unfollowRouter) ;
+app.use('/connection/api',sendConnectionRequestRouter) ;
+app.use('/connection/api',unsendConnectionRequestRouter) ;
+app.use('/connection/api',acceptConnectionRequestRouter) ;
+app.use('/connection/api',cancelConnectionRequestRouter) ;
 Connection() ;
-
 server.listen("3500", () => {
     console.log("App launched successfully") ;  
 })
